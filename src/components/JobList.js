@@ -1,9 +1,9 @@
 import { 
-
     jobListSearchEl,
     jobDetailsContentEl,
-    spinnerJobDetailsEl
 } from '../common.js';
+
+import renderSpinner from './Spinner.js';
 
 // --- JOB LIST COMPONENT
 
@@ -24,7 +24,7 @@ const clickHandler = event => {
     jobDetailsContentEl.innerHTML = '';
 
     // render spinner
-    spinnerJobDetailsEl.classList.add('spinner--visible');
+    renderSpinner('job-details');
 
     // We are getting the id of the which is stored in the href tag.
     const id = jobItemEl.children[0].getAttribute('href');
@@ -42,8 +42,8 @@ const clickHandler = event => {
         const { jobItem } = data;
     
         // remove spinner
-        spinnerJobDetailsEl.classList.remove('spinner--visible');
-    // render job details            
+        renderSpinner('job-details');
+        // render job details            
         
         const jobDetailsHTML = 
         `
