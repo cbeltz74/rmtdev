@@ -1,5 +1,6 @@
 import { 
     BASE_API_URL,
+    state,
     searchInputEl,
     searchFormEl,
     jobListSearchEl,
@@ -42,7 +43,10 @@ const submitHandler = async event => {
     
             // extract jobItems
             const { jobItems } = data;
-    
+            
+            // update state
+            state.searchJobItems = jobItems;
+
             // remove spinner
             renderSpinner('search');
     
@@ -50,7 +54,7 @@ const submitHandler = async event => {
             numberEl.textContent = jobItems.length;
     
             // render job items in seach job list
-            renderJobList(jobItems);
+            renderJobList();
         } catch (error) {
             renderSpinner('search');
             renderError(error);
