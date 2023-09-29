@@ -2,6 +2,7 @@ import {
     BASE_API_URL,
     jobListSearchEl,
     jobDetailsContentEl,
+    getData
 } from '../common.js';
 
 import renderSpinner from './Spinner.js';
@@ -60,12 +61,8 @@ const clickHandler = async event => {
     const id = jobItemEl.children[0].getAttribute('href');
 
     try {
-        const response = await fetch(`${BASE_API_URL}/jobs/${id}`);
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.description);
-        }
+        // fetch job item data
+        const data = await getData(`${BASE_API_URL}/jobs/${id}`);
 
         // extract jobItems
         const { jobItem } = data;
