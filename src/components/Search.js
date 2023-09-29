@@ -13,7 +13,7 @@ import renderJobList from './JobList.js';
 
 // --- SEARCH COMPONENT ----
 
-const submitHandler = event => {
+const submitHandler = async event => {
     event.preventDefault();
 
     const searchText = searchInputEl.value;
@@ -36,27 +36,29 @@ const submitHandler = event => {
         renderSpinner('search');
 
         // fetch search results
-        fetch(`${BASE_API_URL}/jobs?search=${searchText}`)
-            .then(response => {
-                if (!response.ok) { // 4xx 5xx status code
-                    throw new Error('Resource issue (e.g. resources doesn\'t exist) or server issue');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const { jobItems } = data; // we are pulling only jobitems out of the database
+        try {
+            const response = await fetch(`${BASE_API_URL}/jobs?search=${searchText}`);
+            const data = await response.json();
 
-                // remove spinner
-                renderSpinner('search');
-
-                // render number of results
-                numberEl.textContent = jobItems.length;
-                renderJobList(jobItems);
-            })
-            .catch(error => { // network problem or other errors trying to parse something not JSON as JSON
-                renderSpinner('search');
-                renderError(error.message);
-            });
+            if (!response.ok) { // 4xx 5xx status code
+                throw new Error(data.description);
+            }
+    
+            // extract jobItems
+            const { jobItems } = data;
+    
+            // remove spinner
+            renderSpinner('search');
+    
+            // render number of results
+            numberEl.textContent = jobItems.length;
+    
+            // render job items in seach job list
+            renderJobList(jobItems);
+        } catch (error) {
+            renderSpinner('search');
+            renderError(error);
+        }
 };
 
 searchFormEl.addEventListener('submit', submitHandler);

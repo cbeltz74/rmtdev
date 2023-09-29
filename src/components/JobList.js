@@ -2,7 +2,6 @@ import {
     BASE_API_URL,
     jobListSearchEl,
     jobDetailsContentEl,
-    renderError
 } from '../common.js';
 
 import renderSpinner from './Spinner.js';
@@ -38,7 +37,7 @@ const renderJobList = jobItems => {
 
 // --- JOB LIST COMPONENT
 
-const clickHandler = event => {
+const clickHandler = async event => {
     // prevent default behavior of trying to navigate to page using href
     event.preventDefault();
 
@@ -60,26 +59,27 @@ const clickHandler = event => {
     // We are getting the id of the which is stored in the href tag.
     const id = jobItemEl.children[0].getAttribute('href');
 
-    // fetch job item data
-    fetch(`${BASE_API_URL}/jobs/${id}`)
-    .then(response => {
+    try {
+        const response = await fetch(`${BASE_API_URL}/jobs/${id}`);
+        const data = await response.json();
+
         if (!response.ok) {
-            throw new Error('Resource issue (e.g. resources doesn\'t exist) or server issue');
+            throw new Error(data.description);
         }
-        return response.json();
-    })
-    .then(data => {
+
+        // extract jobItems
         const { jobItem } = data;
-    
+        
         // remove spinner
         renderSpinner('job-details');
+
         // render job details            
         renderJobDetails(jobItem);
-    })
-    .catch(error => {
+        
+    } catch {
         renderSpinner('job-details');
         renderError(error.message);
-    });
+    }
 };
 
 
