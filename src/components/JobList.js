@@ -12,6 +12,11 @@ import renderError from './Error.js';
 
 
 const renderJobList = () => {
+
+    // remove previous job items
+    jobListSearchEl.innerHTML = '';
+
+
     state.searchJobItems.slice(0, 7).forEach(jobItem => {
         const newJobItemHTML = `                
         <li class="job-item">
