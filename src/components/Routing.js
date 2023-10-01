@@ -7,6 +7,7 @@ import {
 import renderError from './Error.js';
 import renderSpinner from './Spinner.js';
 import renderJobDetails from './JobDetails.js';
+import renderJobList from './JobList.js';
 
 const loadHashChangeHandler = async () => {
     // get id from url
@@ -20,6 +21,11 @@ const loadHashChangeHandler = async () => {
         renderSpinner('job-details');
 
         try {
+            // remove active class from previously active job items
+            // updated querySelector to querySelectorAll and removed question mark
+            // Added forEach to go over each item and remove job-item--active class
+            document.querySelectorAll('.job-item--active').forEach(jobItemWithActiveClass => jobItemWithActiveClass.classList.remove('job-item--active'));
+
             // fetch job item data
             const data = await getData(`${BASE_API_URL}/jobs/${id}`);
         
@@ -28,6 +34,9 @@ const loadHashChangeHandler = async () => {
 
             // update state
             state.activeJobItem = jobItem;
+
+            // render search job list
+            renderJobList();
         
             // remove spinner
             renderSpinner('job-details');
