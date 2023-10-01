@@ -20,7 +20,8 @@ const clickHandler = event => {
         state.bookmarkJobItems.push(state.activeJobItem);
     }
 
-
+    // persist data with local storage need to convert to string
+    localStorage.setItem('bookmarkJobItems', JSON.stringify(state.bookmarkJobItems));
     
     // update bookmark icon to blue
     document.querySelector('.job-info__bookmark-icon').classList.toggle('job-info__bookmark-icon--bookmarked');
