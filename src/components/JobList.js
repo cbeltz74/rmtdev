@@ -1,7 +1,7 @@
 import {
+    BASE_API_URL,
     RESULTS_PER_PAGE, 
     state,
-    BASE_API_URL,
     jobListSearchEl,
     jobDetailsContentEl,
     getData
@@ -66,6 +66,9 @@ const clickHandler = async event => {
 
     // We are getting the id of the which is stored in the href tag.
     const id = jobItemEl.children[0].getAttribute('href');
+
+    // add id to url
+    history.pushState(null, '', `/#${id}`);
 
     try {
         // fetch job item data
